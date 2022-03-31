@@ -26,7 +26,12 @@ def add_client(chat_id, name, phonenumber):
 def add_subscription():
     pass
 
-def get_client():
+def get_client_subscriptions(id_client):
+    try:
+        client = Client.objects.filter(id=id_client)
+    except Client.DoesNotExist:
+        return None
+    subscriptions = client.subscriptions
     pass
 
 def get_dish():

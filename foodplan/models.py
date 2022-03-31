@@ -17,7 +17,7 @@ class Allergy(models.Model):
         return f'{self.name}'
 
     class Meta:
-        verbose_name = 'Аллергия'
+        verbose_name = 'Аллергию'
         verbose_name_plural = 'Аллергии'
 
 class Menu(models.Model):
@@ -52,7 +52,10 @@ class Subscription(models.Model):
         null=False,
         default=1,
     )
-    allergies = models.ManyToManyField(Allergy)
+    allergies = models.ManyToManyField(
+        Allergy,
+        verbose_name='Аллергии',
+    )
     created_at = models.DateTimeField(
         verbose_name='Когда создана подписка',
         default=timezone.now,
@@ -65,9 +68,10 @@ class Subscription(models.Model):
         null=False,
         default=1,
     )
-
+    def __str__(self):
+        return f'{self.name}'
     class Meta:
-        verbose_name = 'Подписка'
+        verbose_name = 'Подписку'
         verbose_name_plural = 'Подписки'
 
 class Client(models.Model):
@@ -90,13 +94,18 @@ class Client(models.Model):
         null=False,
         default='0'
     )
-    subscriptions = models.ManyToManyField(Subscription)
+    subscriptions = models.ManyToManyField(
+        Subscription,
+        verbose_name='Подписки',
+        blank=True,
+        null=True,
+    )
 
     def __str__(self):
         return f'{self.name}'
 
     class Meta:
-        verbose_name = 'Клиент'
+        verbose_name = 'Клиента'
         verbose_name_plural = 'Клиенты'
 
 class Promo(models.Model):

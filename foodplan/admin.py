@@ -45,6 +45,7 @@ class AllergyAdmin(admin.ModelAdmin):
 
 @admin.register(Subscription)
 class SubscriptionAdmin(admin.ModelAdmin):
+
     list_display = (
         'id', 'name', 'menu',
         'portions',
