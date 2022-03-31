@@ -1,5 +1,6 @@
 import os
 import django
+from django.utils import timezone
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "adminka_foodplan.settings")
 django.setup()
@@ -23,16 +24,33 @@ def add_client(chat_id, name, phonenumber):
         client_phonenumber = phonenumber,
     )
 
-def add_subscription():
-    pass
+def add_subscription(id_client, menu_id, portions, period, allergies_id):
+    num = len(get_client_subscriptions(id_client))
+    subscription = Subscription.objects.create(
+        name = f'{num+1} подписка',
+        menu = Menu.objects.get(id=menu_id),
+        portions = portions,
+        created_at = timezone.now(),
+        period = period,
+    )
+    for item in allergies_id:
+        subscription.allergies.add(get_allergy(item))
+    Client.objects.get(id=id_client).subscriptions.add(subscription)
+    return subscription.id
+
+
+def get_allergy(allergy_id):
+    return Allergy.objects.get(id=allergy_id)
+
+
 
 def get_client_subscriptions(id_client):
     try:
         client = Client.objects.filter(id=id_client)
     except Client.DoesNotExist:
         return None
-    subscriptions = client.subscriptions
-    pass
+    return client.subscriptions
+
 
 def get_dish():
     pass
