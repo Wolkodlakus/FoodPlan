@@ -8,6 +8,11 @@ from.models import (
     Subscription,
     Allergy,
     Promo,
+    Category,
+    Ingredient,
+    Recipe,
+    IngredientsInfo,
+    Step,
 )
 
 @admin.register(Client)
@@ -51,3 +56,10 @@ class SubscriptionAdmin(admin.ModelAdmin):
         'portions',
         'created_at', 'period',
     )
+
+
+admin.site.register(Category)
+admin.site.register(Ingredient)
+admin.site.register(Recipe)
+admin.site.register(IngredientsInfo)
+admin.site.register(Step)
