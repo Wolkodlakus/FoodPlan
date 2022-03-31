@@ -4,47 +4,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
-class Client(models.Model):
-    name = models.CharField(
-        max_length=256,
-        verbose_name='Имя и фамилия клиента',
-        blank=False,
-        null=False,
-    )
-    tg_chat_id = models.PositiveIntegerField(
-        verbose_name='Чат id клиента в Телеграм',
-        unique=True,
-        blank=False,
-        null=False,
-    )
-    client_phonenumber = models.CharField(
-        verbose_name='Номер клиента',
-        max_length=20,
-        blank=False,
-        null=False,
-        default='0'
-    )
-
-    def __str__(self):
-        return f'{self.name}'
-
-    class Meta:
-        verbose_name = 'Клиент'
-        verbose_name_plural = 'Клиенты'
-
-class Menu(models.Model):
-    name = models.CharField(
-        max_length=256,
-        verbose_name='Название Меню',
-        blank=False,
-        null=False,
-    )
-    def __str__(self):
-        return f'{self.name}'
-    class Meta:
-        verbose_name = 'Меню'
-        verbose_name_plural = 'Меню'
-
 class Allergy(models.Model):
     name = models.CharField(
         max_length=256,
@@ -60,6 +19,19 @@ class Allergy(models.Model):
     class Meta:
         verbose_name = 'Аллергия'
         verbose_name_plural = 'Аллергии'
+
+class Menu(models.Model):
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Название Меню',
+        blank=False,
+        null=False,
+    )
+    def __str__(self):
+        return f'{self.name}'
+    class Meta:
+        verbose_name = 'Меню'
+        verbose_name_plural = 'Меню'
 
 class Subscription(models.Model):
     name = models.CharField(
@@ -97,6 +69,35 @@ class Subscription(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
+
+class Client(models.Model):
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Имя и фамилия клиента',
+        blank=False,
+        null=False,
+    )
+    tg_chat_id = models.PositiveIntegerField(
+        verbose_name='Чат id клиента в Телеграм',
+        unique=True,
+        blank=False,
+        null=False,
+    )
+    client_phonenumber = models.CharField(
+        verbose_name='Номер клиента',
+        max_length=20,
+        blank=False,
+        null=False,
+        default='0'
+    )
+    subscriptions = models.ManyToManyField(Subscription)
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'Клиент'
+        verbose_name_plural = 'Клиенты'
 
 class Promo(models.Model):
     name = models.CharField(
