@@ -154,7 +154,7 @@ class Promo(models.Model):
         verbose_name_plural = 'Промокоды'
 
 class Category(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=255)
 
     def __str__(self):
         return self.name
@@ -166,7 +166,7 @@ class Category(models.Model):
 
 
 class IngredientType(models.Model):
-    name = models.CharField(max_length=200, default='Без категории')
+    name = models.CharField(max_length=255, default='Без категории')
 
     def __str__(self):
         return self.name
@@ -178,7 +178,7 @@ class IngredientType(models.Model):
 
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=200, default='')
+    name = models.CharField(max_length=255, default='')
     type = models.ForeignKey(IngredientType, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -191,7 +191,7 @@ class Ingredient(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=255)
     image_link = models.CharField(max_length=255, default='')
     categories = models.ManyToManyField(Category)
     person_nums = models.IntegerField(max_length=8)
@@ -219,7 +219,7 @@ class Step(models.Model):
 class IngredientsInfo(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    ingredient_amount = models.CharField(max_length=200)
+    ingredient_amount = models.CharField(max_length=255)
 
     def __str__(self):
         return self.recipe.title + ' - ' + self.ingredient.name + ' - ' + self.ingredient_amount
