@@ -13,6 +13,7 @@ from.models import (
     Recipe,
     IngredientsInfo,
     Step,
+    Dish
 )
 
 @admin.register(Client)
