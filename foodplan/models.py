@@ -262,3 +262,7 @@ class Dish (models.Model):
         verbose_name='Калорийность',
         default='0'
     )
+    img = models.TextField(
+        verbose_name='ссылка на картинку',
+        default='https://static6.depositphotos.com/1006753/572/i/600/depositphotos_5728788-stock-photo-frying-pan.jpg'
+    )
