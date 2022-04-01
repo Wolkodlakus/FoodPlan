@@ -15,6 +15,7 @@ import foodplan.management.commands.add_user_info as add_user_info
 import foodplan.management.commands.states as states
 import foodplan.management.commands.checks as checks
 import foodplan.management.commands.funcs_db as funcs_db
+import random
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -29,7 +30,7 @@ class Command(BaseCommand):
 
 
 def get_subscribes(update, context):
-    context.user_data['client']
+
     subscriptions=funcs_db.get_client_subscriptions(context.user_data['client'].id)
     subscribes = []
     for item in subscriptions:
@@ -41,7 +42,36 @@ def get_subscribes(update, context):
             Введите вашу фамилию:''')
     )
 
+def get_dish(update, context):
+    subscription = context.user_data['subscription']
+    all_id_suitable_dishes = get_id_suitable_dishes(subscription)
+    all_id_show_dishes = get_id_show_dishes(subscription)
+    if not all_id_suitable_dishes:
+        print('Нет подходящих блюд')
+        return False
+    if len(all_id_suitable_dishes) == len(all_id_show_dishes):
+        print('Показаны все возможные блюда. Очищаем список показанных блюд')
+        clear_show_dishes(subscription)
+    all_id_no_show_dishes = []
+    #случай с нолём
+    for id_dish in all_id_suitable_dishes:
+        if not (id_dish in all_id_show_dishes):
+            all_id_no_show_dishes.append(id_dish)
+    id_dish_show = random.choice(all_id_no_show_dishes)
+    add_id_show_dish(subscription)
+    return id_dish_show
 
+def add_id_show_dish(subscription):
+    pass
+
+def clear_show_dishes(subscription):
+    pass
+
+def get_id_show_dishes(subscription):
+    pass
+
+def get_id_suitable_dishes(subscription):
+    return True
 
 
 def start(update, context):
