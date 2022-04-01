@@ -1,7 +1,8 @@
-import states
-import keyboards
+import foodplan.management.commands.states as states
+import foodplan.management.commands.keyboards as keyboards
 from textwrap import dedent
-import funcs_db
+import foodplan.management.commands.funcs_db as funcs_db
+
 
 
 def choose_menu_type(update, context):
@@ -95,5 +96,4 @@ def output_cost_and_params(update, context):
         new_subscriptions['sub_term'],
         new_subscriptions['allergies']
     )
-    print('!!!!!!')
     return states.States.PAY
