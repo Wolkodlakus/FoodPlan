@@ -15,7 +15,6 @@ import foodplan.management.commands.add_subscription_info as add_subscription_in
 import foodplan.management.commands.payment as payment
 
 
-
 def start(update, context):
     if not funcs_db.find_client(update.message.chat_id):
         update.message.reply_text(

@@ -24,6 +24,7 @@ def create_personal_area():
     ]
     return make_reply_markup(keyboard)
 
+
 def get_one_subscription():
     keyboard = [
         [KeyboardButton(text='Мои подписки')],
@@ -32,8 +33,8 @@ def get_one_subscription():
     return make_reply_markup(keyboard)
 
 
-def create_all_gamer_games_keyboard(gamer_games):
-    keyboard = [[KeyboardButton(text=game['game_name'])] for game in gamer_games]
+def create_all_subscribes_keyboards(subscriptions):
+    keyboard = [[KeyboardButton(text=sub)] for sub in subscriptions]
     return make_reply_markup(keyboard)
 
 
