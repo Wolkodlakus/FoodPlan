@@ -22,6 +22,7 @@ class ClientAdmin(admin.ModelAdmin):
         'id',
         'name',
         'tg_chat_id',
+        #'subscriptions'
     )
 
 @admin.register(Menu)
@@ -54,7 +55,7 @@ class SubscriptionAdmin(admin.ModelAdmin):
 
     list_display = (
         'id', 'name', 'menu',
-        'portions',
+        'portions', 'client',
         'created_at', 'period',
     )
 

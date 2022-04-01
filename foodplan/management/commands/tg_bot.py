@@ -28,6 +28,22 @@ class Command(BaseCommand):
             raise CommandError(exc)
 
 
+def get_subscribes(update, context):
+    context.user_data['client']
+    subscriptions=funcs_db.get_client_subscriptions(context.user_data['client'].id)
+    subscribes = []
+    for item in subscriptions:
+        subscribes.append(item.name)
+
+    update.message.reply_text(
+        dedent(f'''\
+            Ваши подписки {' '.join(subscribes)} .
+            Введите вашу фамилию:''')
+    )
+
+
+
+
 def start(update, context):
     id_client = funcs_db.find_client(update.message.chat_id)
     if not id_client:
@@ -117,7 +133,7 @@ def main():
             states.States.PERSONAL_AREA: [
                 MessageHandler(
                     Filters.regex('^Мои подписки'),
-                    add_user_info.add_current_phone
+                    get_subscribes
                 ),
                 MessageHandler(
                     Filters.regex('^Создать подписку'),

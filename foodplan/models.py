@@ -33,6 +33,34 @@ class Menu(models.Model):
         verbose_name = 'Меню'
         verbose_name_plural = 'Меню'
 
+class Client(models.Model):
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Имя и фамилия клиента',
+        blank=False,
+        null=False,
+    )
+    tg_chat_id = models.PositiveIntegerField(
+        verbose_name='Чат id клиента в Телеграм',
+        unique=True,
+        blank=False,
+        null=False,
+    )
+    client_phonenumber = models.CharField(
+        verbose_name='Номер клиента',
+        max_length=20,
+        blank=False,
+        null=False,
+        default='0'
+    )
+
+    def __str__(self):
+        return f'{self.name}'
+
+    class Meta:
+        verbose_name = 'Клиента'
+        verbose_name_plural = 'Клиенты'
+
 class Subscription(models.Model):
     name = models.CharField(
         max_length=256,
@@ -68,45 +96,20 @@ class Subscription(models.Model):
         null=False,
         default=1,
     )
+    client = models.ForeignKey(
+        Client,
+        verbose_name='Хозяин подписки',
+        blank=False,
+        null=False,
+        on_delete=models.CASCADE,
+        related_name='subscriptions',
+    )
     def __str__(self):
         return f'{self.name}'
     class Meta:
         verbose_name = 'Подписку'
         verbose_name_plural = 'Подписки'
 
-class Client(models.Model):
-    name = models.CharField(
-        max_length=256,
-        verbose_name='Имя и фамилия клиента',
-        blank=False,
-        null=False,
-    )
-    tg_chat_id = models.PositiveIntegerField(
-        verbose_name='Чат id клиента в Телеграм',
-        unique=True,
-        blank=False,
-        null=False,
-    )
-    client_phonenumber = models.CharField(
-        verbose_name='Номер клиента',
-        max_length=20,
-        blank=False,
-        null=False,
-        default='0'
-    )
-    subscriptions = models.ManyToManyField(
-        Subscription,
-        verbose_name='Подписки',
-        blank=True,
-        null=True,
-    )
-
-    def __str__(self):
-        return f'{self.name}'
-
-    class Meta:
-        verbose_name = 'Клиента'
-        verbose_name_plural = 'Клиенты'
 
 class Promo(models.Model):
     name = models.CharField(

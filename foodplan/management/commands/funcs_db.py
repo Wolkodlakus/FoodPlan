@@ -48,10 +48,10 @@ def get_allergy(allergy_id):
 
 def get_client_subscriptions(id_client):
     try:
-        client = Client.objects.filter(id=id_client)
+        client = Client.objects.get(id=id_client)
     except Client.DoesNotExist:
         return None
-    return client.subscriptions
+    return client.subscriptions.all()
 
 
 def get_dish():
