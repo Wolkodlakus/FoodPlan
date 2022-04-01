@@ -24,3 +24,46 @@ def create_personal_area():
     ]
     return make_reply_markup(keyboard)
 
+
+def create_all_gamer_games_keyboard(gamer_games):
+    keyboard = [[KeyboardButton(text=game['game_name'])] for game in gamer_games]
+    return make_reply_markup(keyboard)
+
+
+def choose_menu_type():
+    keyboard = [
+        [KeyboardButton(text='Классическое')],
+        [KeyboardButton(text='Низкоуглеводное')],
+        [KeyboardButton(text='Вегетарианское')],
+        [KeyboardButton(text='Кето')],
+    ]
+    return make_reply_markup(keyboard)
+
+
+def choose_allergies():
+    keyboard = [
+        [KeyboardButton(text='Рыба и морепродукты')],
+        [KeyboardButton(text='Мясо')],
+        [KeyboardButton(text='Зерновые')],
+        [KeyboardButton(text='Продукты пчеловодства')],
+        [KeyboardButton(text='Орехи и бобовые')],
+        [KeyboardButton(text='Молочные продукты')],
+    ]
+    return make_reply_markup(keyboard)
+
+
+def choose_subscriptions_term():
+    keyboard = [
+        [KeyboardButton(text='1')],
+        [KeyboardButton(text='3')],
+        [KeyboardButton(text='6')],
+        [KeyboardButton(text='12')],
+    ]
+    return make_reply_markup(keyboard)
+
+
+def pay():
+    keyboard = [
+        [KeyboardButton(text='PAY')],
+    ]
+    return make_reply_markup(keyboard)
