@@ -1,11 +1,13 @@
 import os
+
 import django
 from django.utils import timezone
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "adminka_foodplan.settings")
 django.setup()
 
-from foodplan.models import Allergy, Client, Menu, Promo, Subscription
+from foodplan.models import Allergy, Client, Menu, Subscription
+
 
 def find_client(chat_id):
     """Функция возвращает id клиента по его id в телеграмме. Либо None"""
@@ -26,14 +28,15 @@ def add_client(chat_id, name, phonenumber):
         client_phonenumber=phonenumber,
     )
 
+
 def add_subscription(id_client, menu_id, portions, period, allergies_id):
     num = len(get_client_subscriptions(id_client))
     subscription = Subscription.objects.create(
-        name = f'{num+1} подписка',
-        menu = Menu.objects.get(id=menu_id),
-        portions = portions,
-        created_at = timezone.now(),
-        period = period,
+        name=f'{num + 1} подписка',
+        menu=Menu.objects.get(id=menu_id),
+        portions=portions,
+        created_at=timezone.now(),
+        period=period,
     )
     for item in allergies_id:
         subscription.allergies.add(get_allergy(item))
@@ -43,7 +46,6 @@ def add_subscription(id_client, menu_id, portions, period, allergies_id):
 
 def get_allergy(allergy_id):
     return Allergy.objects.get(id=allergy_id)
-
 
 
 def get_client_subscriptions(id_client):
@@ -65,5 +67,6 @@ def get_allergies():
         allergies.append(item.name)
     return allergies
 
-if __name__== '__main__':
+
+if __name__ == '__main__':
     pass
