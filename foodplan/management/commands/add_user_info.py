@@ -86,14 +86,14 @@ def input_name(update, context):
     update.message.reply_text(
         dedent(f'''\
             Информация о вас записана:
-            Имя: {new_user['name']}
-            Фамилия: {new_user['surname']}
-            Номер телефона: {new_user['phone_number']}'''),
+            Имя: {new_user['user_name']}
+            Фамилия: {new_user['user_surname']}
+            Номер телефона: {new_user['user_phone']}'''),
         reply_markup=keyboards.create_personal_area()
     )
     funcs_db.add_client(
         update.message.chat_id,
-        new_user['name'],
-        new_user['phone_number']
+        new_user['user_name'],
+        new_user['user_phone']
     )
     return states.States.PERSONAL_AREA
