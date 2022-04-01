@@ -65,6 +65,7 @@ class DishAdmin(admin.ModelAdmin):
         'id', 'name', 'menu',
         'portions',
         'ingredients', 'recipe',
+        'advice', 'kkal',
     )
 
 admin.site.register(Category)

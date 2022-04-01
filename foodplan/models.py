@@ -254,3 +254,11 @@ class Dish (models.Model):
     recipe= models.TextField(
         verbose_name='Рецепт',
     )
+    advice = models.TextField(
+        verbose_name='Советы',
+        default=''
+    )
+    kkal = models.IntegerField(
+        verbose_name='Калорийность',
+        default='0'
+    )
