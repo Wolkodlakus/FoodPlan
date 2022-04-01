@@ -1,4 +1,6 @@
 import phonenumbers
+import funcs_db
+
 
 def check_ru_letters(user_input):
     ru_alphabet = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя'
@@ -17,3 +19,9 @@ def check_phone(phone):
 
     except phonenumbers.phonenumberutil.NumberParseException:
         return False
+
+
+def checking_existence_subscriptions(tg_id):
+    db_user_id = funcs_db.find_client(tg_id)
+    return funcs_db.get_client_subscriptions(db_user_id)
+
