@@ -1,18 +1,19 @@
-import foodplan.management.commands.keyboards as keyboards
-import foodplan.management.commands.states as states
-import foodplan.management.commands.checks as checks
 from textwrap import dedent
-from foodplan.models import Client
+
+import checks
+import keyboards
+import states
+import funcs_db
 
 
 def add_current_phone(update, context):
-    context.user_data['phone'] = update.message.contact.phone_number
+    phone_number = update.message.contact.phone_number
+    context.chat_data['phone_number'] = phone_number
     update.message.reply_text(
         dedent(f'''\
-        Ваш номер телефона {update.message.contact.phone_number } сохранен.
+        Ваш номер телефона {phone_number} сохранен.
         Введите вашу фамилию:''')
     )
-    print('We need to add current user phone in the db')
     return states.States.INPUT_USER_SURNAME
 
 
@@ -40,8 +41,7 @@ def add_new_phone(update, context):
         )
         return states.States.INPUT_NEW_PHONE
 
-    print('We need to add user phone in the db')
-    context.user_data['phone'] = phone
+    context.chat_data['phone_number'] = phone
     update.message.reply_text(
         'Введите свою фамилию.'
     )
@@ -59,8 +59,8 @@ def input_surname(update, context):
             Попробуйте еще раз.''')
         )
         return states.States.INPUT_USER_SURNAME
-    context.user_data['surname'] = surname
-    print('We need to save user surname in the db')
+
+    context.chat_data['surname'] = surname
 
     update.message.reply_text(
         'Введите ваше Имя:'
@@ -78,16 +78,22 @@ def input_name(update, context):
             Попробуйте еще раз.''')
         )
         return states.States.INPUT_USER_NAME
-
-    print('We need to save user name in the db')
-    context.user_data['name'] = name
-    Client.objects.create(
-        name=f'{context.user_data["name"]} {context.user_data["surname"]}',
-        tg_chat_id = context.user_data["chat_id"],
-        client_phonenumber=context.user_data["phone"]
-    )
+    new_user = {
+        'user_name': name,
+        'user_surname': context.chat_data['surname'],
+        'user_phone': context.chat_data['phone_number']
+    }
     update.message.reply_text(
-        'Информация о вас записана.',
+        dedent(f'''\
+            Информация о вас записана:
+            Имя: {new_user['name']}
+            Фамилия: {new_user['surname']}
+            Номер телефона: {new_user['phone_number']}'''),
         reply_markup=keyboards.create_personal_area()
+    )
+    funcs_db.add_client(
+        update.message.chat_id,
+        new_user['name'],
+        new_user['phone_number']
     )
     return states.States.PERSONAL_AREA
