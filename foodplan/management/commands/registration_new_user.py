@@ -15,7 +15,7 @@ import funcs_db
 
 
 def start(update, context):
-    if funcs_db.find_client(update.message.chat_id):
+    if not funcs_db.find_client(update.message.chat_id):
         update.message.reply_text(
             dedent('''\
             Вы у нас впервые.
