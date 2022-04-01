@@ -2,17 +2,20 @@ import os
 from dotenv import load_dotenv
 from textwrap import dedent
 
-from telegram import LabeledPrice
+
 from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, PreCheckoutQueryHandler, Updater)
 import keyboards
 import add_user_info
 import states
-import checks
+import current_subscriptions
+import add_subscription_info
+import payment
+import funcs_db
 
 
 def start(update, context):
-    if checks.check_new_user(update.message.chat_id):
+    if funcs_db.find_client(update.message.chat_id):
         update.message.reply_text(
             dedent('''\
             Вы у нас впервые.
@@ -79,11 +82,59 @@ def run_bot(tg_token):
             states.States.PERSONAL_AREA: [
                 MessageHandler(
                     Filters.regex('^Мои подписки'),
-                    add_user_info.add_current_phone
+                    current_subscriptions.output_subscriptions
                 ),
                 MessageHandler(
                     Filters.regex('^Создать подписку'),
-                    add_user_info.input_new_phone
+                    add_subscription_info.input_subscription_name
+                ),
+            ],
+            states.States.CHOOSE_MENU_TYPE: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_menu_type
+                ),
+            ],
+            states.States.CHOOSE_PERSON_AMOUNT: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_person_amount
+                ),
+            ],
+            states.States.CHOOSE_MEALS_AMOUNT: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_meals_amount
+                ),
+            ],
+            states.States.CHOOSE_ALLERGIES: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_allergies
+                ),
+            ],
+            states.States.CHOOSE_SUBSCRIPTIONS_TERM: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_subscriptions_term
+                ),
+            ],
+            states.States.OUTPUT_COST_AND_PARAMS: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.output_cost_and_params
+                ),
+            ],
+            states.States.PAY: [
+                MessageHandler(
+                    Filters.regex('^PAY'),
+                    payment.start_without_shipping_callback
+                ),
+            ],
+            states.States.ADD_SUBSCRIPTION_TO_DB: [
+                MessageHandler(
+                    Filters.successful_payment,
+                    payment.successful_payment_callback
                 ),
             ],
         },
@@ -93,6 +144,7 @@ def run_bot(tg_token):
         ],
     )
     dispatcher.add_handler(conv_handler)
+    dispatcher.add_handler(PreCheckoutQueryHandler(payment.precheckout_callback))
 
     updater.start_polling()
     updater.idle()
@@ -102,6 +154,7 @@ def main():
 
     load_dotenv()
     tg_token = os.getenv('TELEGRAM_TOKEN')
+
     run_bot(tg_token)
 
 
