@@ -10,18 +10,20 @@ from foodplan.models import Allergy, Client, Menu, Promo, Subscription
 def find_client(chat_id):
     """Функция возвращает id клиента по его id в телеграмме. Либо None"""
     try:
-        client = Client.objects.filter(tg_chat_id=chat_id)
+        client = Client.objects.get(tg_chat_id=chat_id)
     except Client.DoesNotExist:
         return None
+    print(client)
+    print(type(client))
     return client.id
 
 
 def add_client(chat_id, name, phonenumber):
     """Функция добавляет нового клиента"""
     Client.objects.create(
-        name = name,
-        tg_chat_id = chat_id,
-        client_phonenumber = phonenumber,
+        name=name,
+        tg_chat_id=chat_id,
+        client_phonenumber=phonenumber,
     )
 
 def add_subscription(id_client, menu_id, portions, period, allergies_id):
