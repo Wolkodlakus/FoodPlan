@@ -86,12 +86,6 @@ def run_bot(tg_token):
                 ),
                 MessageHandler(
                     Filters.regex('^Создать подписку'),
-                    add_subscription_info.input_subscription_name
-                ),
-            ],
-            states.States.CHOOSE_MENU_TYPE: [
-                MessageHandler(
-                    Filters.text & ~Filters.command,
                     add_subscription_info.choose_menu_type
                 ),
             ],

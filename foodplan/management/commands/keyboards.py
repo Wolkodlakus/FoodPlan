@@ -42,6 +42,7 @@ def choose_menu_type():
 
 def choose_allergies():
     keyboard = [
+        [KeyboardButton(text='Нет')],
         [KeyboardButton(text='Рыба и морепродукты')],
         [KeyboardButton(text='Мясо')],
         [KeyboardButton(text='Зерновые')],

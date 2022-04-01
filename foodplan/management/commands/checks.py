@@ -21,7 +21,7 @@ def check_phone(phone):
         return False
 
 
-def checking_existence_subscriptions(tg_id):
+def check_subscriptions(tg_id):
     db_user_id = funcs_db.find_client(tg_id)
     return funcs_db.get_client_subscriptions(db_user_id)
 
