@@ -223,3 +223,34 @@ class IngredientsInfo(models.Model):
 
     def __str__(self):
         return self.recipe.title + ' - ' + self.ingredient.name + ' - ' + self.ingredient_amount
+
+
+class Dish (models.Model):
+    name = models.CharField(
+        max_length=256,
+        verbose_name='Название блюда',
+        blank=False,
+        null=False,
+    )
+    menu = models.ForeignKey(
+        Menu,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=False
+    )
+    portions = models.PositiveIntegerField(
+        verbose_name='Количество порций',
+        blank=False,
+        null=False,
+        default=1,
+    )
+    allergies = models.ManyToManyField(
+        Allergy,
+        verbose_name='Аллергии',
+    )
+    ingredients = models.TextField(
+        verbose_name='Ингридиенты',
+    )
+    ingredients = models.TextField(
+        verbose_name='Рецепт',
+    )

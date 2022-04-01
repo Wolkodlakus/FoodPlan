@@ -57,6 +57,14 @@ class SubscriptionAdmin(admin.ModelAdmin):
         'created_at', 'period',
     )
 
+@admin.register(Dish)
+class DishAdmin(admin.ModelAdmin):
+
+    list_display = (
+        'id', 'name', 'menu',
+        'portions',
+        'ingredients', 'recipe',
+    )
 
 admin.site.register(Category)
 admin.site.register(Ingredient)
