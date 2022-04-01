@@ -15,6 +15,9 @@ import foodplan.management.commands.add_user_info as add_user_info
 import foodplan.management.commands.states as states
 import foodplan.management.commands.checks as checks
 import foodplan.management.commands.funcs_db as funcs_db
+import foodplan.management.commands.payment as payment
+import foodplan.management.commands.add_subscription_info as add_subscription_info
+import foodplan.management.commands.current_subscriptions as current_subscriptions
 import random
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -28,19 +31,6 @@ class Command(BaseCommand):
         except Exception as exc:
             raise CommandError(exc)
 
-
-def get_subscribes(update, context):
-
-    subscriptions=funcs_db.get_client_subscriptions(context.user_data['client'].id)
-    subscribes = []
-    for item in subscriptions:
-        subscribes.append(item.name)
-
-    update.message.reply_text(
-        dedent(f'''\
-            Ваши подписки {' '.join(subscribes)} .
-            Введите вашу фамилию:''')
-    )
 
 def add_subscribe(update, context):
     pass
@@ -77,11 +67,18 @@ def get_id_suitable_dishes(subscription):
     return True
 
 
+
+def cancel(update: Update, context: CallbackContext):
+    #user = update.message.from_user
+    logger.info('Пользователь ввёл cancel')
+    update.message.reply_text(
+        'Пока!', reply_markup=ReplyKeyboardRemove()
+    )
+    return ConversationHandler.END
+
+
 def start(update, context):
-    id_client = funcs_db.find_client(update.message.chat_id)
-    if not id_client:
-        logger.info(f'Не найден пользователь с chat_id {update.message.chat_id}')
-        context.user_data['chat_id'] = update.message.chat_id
+    if not funcs_db.find_client(update.message.chat_id):
         update.message.reply_text(
             dedent('''\
             Вы у нас впервые.
@@ -93,8 +90,7 @@ def start(update, context):
             reply_markup=keyboards.get_user_phone()
         )
         return states.States.ADD_USER_PHONE
-    context.user_data['client'] = Client.objects.get(id=id_client)
-    logger.info(f'Пользователь с chat_id {update.message.chat_id} найден, это {context.user_data["client"].name}')
+
     update.message.reply_text(
         'Выберите действие:',
         reply_markup=keyboards.create_personal_area()
@@ -103,18 +99,9 @@ def start(update, context):
 
 
 def handle_unknown(update, context):
-    logger.info(f'Неизвестная команда')
     update.message.reply_text(
         text='Извините, но я вас не понял :(',
     )
-
-def cancel(update: Update, context: CallbackContext):
-    #user = update.message.from_user
-    logger.info('Пользователь ввёл cancel')
-    update.message.reply_text(
-        'Пока!', reply_markup=ReplyKeyboardRemove()
-    )
-    return ConversationHandler.END
 
 
 def main():
@@ -166,11 +153,53 @@ def main():
             states.States.PERSONAL_AREA: [
                 MessageHandler(
                     Filters.regex('^Мои подписки'),
-                    get_subscribes
+                    current_subscriptions.output_subscriptions
                 ),
                 MessageHandler(
                     Filters.regex('^Создать подписку'),
-                    add_subscribe
+                    add_subscription_info.choose_menu_type
+                ),
+            ],
+            states.States.CHOOSE_PERSON_AMOUNT: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_person_amount
+                ),
+            ],
+            states.States.CHOOSE_MEALS_AMOUNT: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_meals_amount
+                ),
+            ],
+            states.States.CHOOSE_ALLERGIES: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_allergies
+                ),
+            ],
+            states.States.CHOOSE_SUBSCRIPTIONS_TERM: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.choose_subscriptions_term
+                ),
+            ],
+            states.States.OUTPUT_COST_AND_PARAMS: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    add_subscription_info.output_cost_and_params
+                ),
+            ],
+            states.States.PAY: [
+                MessageHandler(
+                    Filters.regex('^PAY'),
+                    payment.start_without_shipping_callback
+                ),
+            ],
+            states.States.ADD_SUBSCRIPTION_TO_DB: [
+                MessageHandler(
+                    Filters.successful_payment,
+                    payment.successful_payment_callback
                 ),
             ],
         },
