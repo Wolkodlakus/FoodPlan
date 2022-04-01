@@ -1,9 +1,9 @@
 from textwrap import dedent
 
-import checks
-import keyboards
-import states
-import funcs_db
+import foodplan.management.commands.checks as checks
+import foodplan.management.commands.keyboards as keyboards
+import foodplan.management.commands.states as states
+import foodplan.management.commands.funcs_db as funcs_db
 
 
 def add_current_phone(update, context):

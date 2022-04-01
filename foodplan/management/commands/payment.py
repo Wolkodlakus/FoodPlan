@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 
-from foodplan.management.commands import keyboards
-import states
+import foodplan.management.commands.keyboards as keyboards
+import foodplan.management.commands.states as states
 import os
 from telegram import LabeledPrice
 

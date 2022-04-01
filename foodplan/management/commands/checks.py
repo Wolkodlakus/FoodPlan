@@ -1,5 +1,5 @@
 import phonenumbers
-import funcs_db
+import foodplan.management.commands.funcs_db as funcs_db
 
 
 def check_ru_letters(user_input):

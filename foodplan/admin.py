@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path
 # Register your models here.
-from.models import (
+from .models import (
     Client,
     Menu,
     Subscription,

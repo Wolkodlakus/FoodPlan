@@ -42,6 +42,9 @@ def get_subscribes(update, context):
             Введите вашу фамилию:''')
     )
 
+def add_subscribe(update, context):
+    pass
+
 def get_dish(update, context):
     subscription = context.user_data['subscription']
     all_id_suitable_dishes = get_id_suitable_dishes(subscription)
@@ -167,7 +170,7 @@ def main():
                 ),
                 MessageHandler(
                     Filters.regex('^Создать подписку'),
-                    add_user_info.input_new_phone
+                    add_subscribe
                 ),
             ],
         },

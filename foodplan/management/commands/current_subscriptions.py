@@ -1,7 +1,7 @@
 from textwrap import dedent
 import keyboards
 import states
-from foodplan.management.commands import checks
+import foodplan.management.commands.checks as checks
 
 
 def output_subscriptions(update, context):

@@ -5,13 +5,15 @@ from textwrap import dedent
 
 from telegram.ext import (CommandHandler, ConversationHandler, Filters,
                           MessageHandler, PreCheckoutQueryHandler, Updater)
-import keyboards
-import add_user_info
-import states
-import current_subscriptions
-import add_subscription_info
-import payment
-import funcs_db
+
+import foodplan.management.commands.keyboards as keyboards
+import foodplan.management.commands.states as states
+import foodplan.management.commands.funcs_db as funcs_db
+import foodplan.management.commands.add_user_info as add_user_info
+import foodplan.management.commands.current_subscriptions as current_subscriptions
+import foodplan.management.commands.add_subscription_info as add_subscription_info
+import foodplan.management.commands.payment as payment
+
 
 
 def start(update, context):
