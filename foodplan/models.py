@@ -251,6 +251,6 @@ class Dish (models.Model):
     ingredients = models.TextField(
         verbose_name='Ингридиенты',
     )
-    ingredients = models.TextField(
+    recipe= models.TextField(
         verbose_name='Рецепт',
     )
