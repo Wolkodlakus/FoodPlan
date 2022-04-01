@@ -1,6 +1,6 @@
 from textwrap import dedent
-import keyboards
-import states
+import foodplan.management.commands.keyboards as keyboards
+import foodplan.management.commands.states as states
 import foodplan.management.commands.checks as checks
 
 
