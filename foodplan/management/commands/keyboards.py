@@ -33,7 +33,7 @@ def get_one_subscription():
     return make_reply_markup(keyboard)
 
 
-def create_all_subscribes_keyboards(subscriptions):
+def create_all_subscriptions_keyboards(subscriptions):
     keyboard = [[KeyboardButton(text=sub)] for sub in subscriptions]
     return make_reply_markup(keyboard)
 
