@@ -12,7 +12,7 @@ def output_subscriptions(update, context):
         update.message.reply_text(
             dedent(f'''\
                 Вот ваши подписки:
-                Чтобы посмотреть детальную информацию о подписке,
+                Чтобы получить блюдо из подписки,
                 нажмите соответствующую кнопку с ее названием.'''),
             reply_markup=keyboards.create_all_subscriptions_keyboards(
                 subscriptions
