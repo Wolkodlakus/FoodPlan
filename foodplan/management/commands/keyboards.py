@@ -34,7 +34,7 @@ def get_one_subscription():
 
 
 def create_all_subscriptions_keyboards(subscriptions):
-    keyboard = [[KeyboardButton(text=type(sub))] for ind, sub in enumerate(subscriptions)]
+    keyboard = [[KeyboardButton(text=ind)] for ind, sub in enumerate(subscriptions)]
     return make_reply_markup(keyboard)
 
 

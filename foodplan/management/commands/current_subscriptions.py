@@ -6,6 +6,8 @@ import foodplan.management.commands.checks as checks
 
 def output_subscriptions(update, context):
     subscriptions = checks.check_subscriptions(update.message.chat_id)
+    print(subscriptions)
+    print(type(subscriptions))
     if subscriptions:
         update.message.reply_text(
             dedent(f'''\
