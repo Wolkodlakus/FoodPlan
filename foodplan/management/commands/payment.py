@@ -20,7 +20,7 @@ def start_without_shipping_callback(update, context):
     description = "Оплата подписки"
     payload = bot_payload
     currency = "RUB"
-    price = context.chat_data['new_subscriptions']['cost']
+    price = context.chat_data['new_subscription']['cost']
     prices = [LabeledPrice("Test", int(price * 100))]
     context.bot.send_invoice(client_id, title, description, payload,
                              provider_token, currency, prices)
