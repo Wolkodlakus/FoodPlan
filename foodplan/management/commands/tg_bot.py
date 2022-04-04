@@ -66,14 +66,14 @@ def get_one_dish(update, context):
 def add_id_show_dish(subscription_name, id_dish_show):
     subscription = Subscription.objects.get(name=subscription_name)
     dvs = DishViewSubscription.objects.create(
-        subcription = subscription,
+        subscription = subscription,
         dish = Dish.objects.get(id=id_dish_show)
     )
 
 
 def clear_show_dishes(subscription_name):
     subscription = Subscription.objects.get(name=subscription_name)
-    DishViewSubscription.objects.filter(subcription = subscription).delete()
+    DishViewSubscription.objects.filter(subscription = subscription).delete()
 
 
 def get_id_show_dishes(subscription_name):
