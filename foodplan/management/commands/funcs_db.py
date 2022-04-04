@@ -32,7 +32,7 @@ def add_client(chat_id, name, phonenumber):
 def add_subscription(id_client, menu_id, portions, period, allergy):
     num = len(get_client_subscriptions(id_client))
     subscription = Subscription.objects.create(
-        name=f'{num + 1} подписка',
+        name=f'{num + 1} подписка пользователя {Client.objects.get(id=id_client).name}',
         menu=Menu.objects.get(id=menu_id),
         portions=portions,
         created_at=timezone.now(),

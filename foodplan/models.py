@@ -272,8 +272,8 @@ class Dish (models.Model):
 
 
 class DishViewSubscription(models.Model):
-    subcription = models.ForeignKey(Recipe, on_delete=models.CASCADE,verbose_name='ID подписки')
-    dish = models.ForeignKey(Ingredient, on_delete=models.CASCADE,verbose_name= 'ID уже показанного блюда')
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE,verbose_name='ID подписки')
+    dish = models.ForeignKey(Dish, on_delete=models.CASCADE,verbose_name= 'ID уже показанного блюда')
 
     def __str__(self):
-        return 'Подписка '+ self.id_sub.name + ', ' + self.id_dish.name
+        return 'Подписка '+ self.subscription.name + ', ' + self.dish.name

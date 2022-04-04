@@ -7,8 +7,10 @@ import foodplan.management.commands.keyboards as keyboards
 
 def get_dish(update, context):
     context.chat_data['subscription'] = update.message.text
+    context.user_data['subscription'] = context.chat_data['subscription']
+    print(context.user_data['subscription'])
     #пока поиск только по имени подписки. Нужно совместить с поиском по клиенту.
-    id_dish = tg_bot.get_dish(context.chat_data['subscription'])
+    id_dish = tg_bot.get_one_dish(update, context)
     if not id_dish:
         update.message.reply_text(
             'В этой подписке нет подходящих блюд',

@@ -63,29 +63,39 @@ def get_one_dish(update, context):
     add_id_show_dish(subscription, id_dish_show)
     return id_dish_show
 
-def add_id_show_dish(subscription, id_dish_show):
+def add_id_show_dish(subscription_name, id_dish_show):
+    subscription = Subscription.objects.get(name=subscription_name)
     dvs = DishViewSubscription.objects.create(
         subcription = subscription,
         dish = Dish.objects.get(id=id_dish_show)
     )
 
 
-def clear_show_dishes(subscription):
+def clear_show_dishes(subscription_name):
+    subscription = Subscription.objects.get(name=subscription_name)
     DishViewSubscription.objects.filter(subcription = subscription).delete()
 
 
-def get_id_show_dishes(subscription):
-    dvs = DishViewSubscription.objects.filter(subcription = subscription)
+def get_id_show_dishes(subscription_name):
+    subscription = Subscription.objects.get(name=subscription_name)
+    #try:
+    #    dvs = DishViewSubscription.objects.filter(subscription = subscription)
+    #except:
+    #    return False
+    #dvs = DishViewSubscription.objects.filter(subscription__name=subscription_name)
+    dvs = DishViewSubscription.objects.filter(subscription=subscription)
+    print(dvs)
     id_dishs = []
     for item in dvs:
         id_dishs.append(item.dish.id)
     return id_dishs
 
-def get_id_suitable_dishes(subscription):
+def get_id_suitable_dishes(subscription_name):
+    subscription = Subscription.objects.get(name=subscription_name)
     dishs_suitables = Dish.objects.filter(
         menu=subscription.menu,
         portions = subscription.portions,
-        allergies = subscription.allergies,
+        #allergies = subscription.allergies,
     )
     ds = []
     for item in dishs_suitables:
