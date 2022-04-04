@@ -38,7 +38,7 @@ def successful_payment_callback(update, context):
     funcs_db.add_subscription(
         funcs_db.find_client(update.message.chat_id),
         new_subscription['menu_type'],
-        new_subscription['person_amount'],
+        new_subscription['meals_amount'],
         new_subscription['sub_term'],
         new_subscription['allergies']
     )
