@@ -26,6 +26,7 @@ import foodplan.management.commands.funcs_db as funcs_db
 import foodplan.management.commands.payment as payment
 import foodplan.management.commands.add_subscription_info as add_subscription_info
 import foodplan.management.commands.current_subscriptions as current_subscriptions
+import foodplan.management.commands.get_dishs as get_dishs
 import random
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -208,6 +209,12 @@ def main():
                 MessageHandler(
                     Filters.successful_payment,
                     payment.successful_payment_callback
+                ),
+            ],
+            states.States.CURRENT_SUBSCRIPTIONS: [
+                MessageHandler(
+                    Filters.text & ~Filters.command,
+                    get_dishs.get_dish
                 ),
             ],
         },

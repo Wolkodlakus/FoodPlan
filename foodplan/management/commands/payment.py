@@ -35,6 +35,7 @@ def successful_payment_callback(update, context):
     )
     print('Добавить подписку в БД')
     new_subscription = context.chat_data['new_subscription']
+    print(new_subscription)
     funcs_db.add_subscription(
         funcs_db.find_client(update.message.chat_id),
         new_subscription['menu_type'],
@@ -49,6 +50,7 @@ def precheckout_callback(update, context):
     """Answers the PreQecheckoutQuery"""
     load_dotenv()
     bot_payload = os.getenv('BOT_PAYLOAD')
+    print('!!!')
     query = update.pre_checkout_query
     # check the payload, is this from your bot?
     if query.invoice_payload != bot_payload:

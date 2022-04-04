@@ -29,7 +29,7 @@ def add_client(chat_id, name, phonenumber):
     )
 
 
-def add_subscription(id_client, menu_id, portions, period, allergies_id):
+def add_subscription(id_client, menu_id, portions, period, allergy):
     num = len(get_client_subscriptions(id_client))
     subscription = Subscription.objects.create(
         name=f'{num + 1} подписка',
@@ -37,12 +37,21 @@ def add_subscription(id_client, menu_id, portions, period, allergies_id):
         portions=portions,
         created_at=timezone.now(),
         period=period,
+        client = Client.objects.get(id=id_client),
+
     )
-    for item in allergies_id:
-        subscription.allergies.add(get_allergy(item))
-    Client.objects.get(id=id_client).subscriptions.add(subscription)
+    #На случай нескольких аллергий
+    #for item in allergies_id:
+    #    subscription.allergies.add(get_allergy(item))
+    #Client.objects.get(id=id_client).subscriptions.add(subscription)
+    # если передаём только одну аллергию
+    allergies = get_allergy2(allergy)
+    subscription.allergies.add(allergies)
+
     return subscription.id
 
+def get_allergy2(allergy_name):
+    return Allergy.objects.get(name=allergy_name)
 
 def get_allergy(allergy_id):
     return Allergy.objects.get(id=allergy_id)
