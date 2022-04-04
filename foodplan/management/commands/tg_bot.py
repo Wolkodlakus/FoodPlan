@@ -54,11 +54,14 @@ def get_one_dish(update, context):
     if len(all_id_suitable_dishes) == len(all_id_show_dishes):
         print('Показаны все возможные блюда. Очищаем список показанных блюд')
         clear_show_dishes(subscription)
+        all_id_suitable_dishes = get_id_suitable_dishes(subscription)
     all_id_no_show_dishes = []
     #случай с нолём
     for id_dish in all_id_suitable_dishes:
         if not (id_dish in all_id_show_dishes):
             all_id_no_show_dishes.append(id_dish)
+    if not len(all_id_no_show_dishes):
+        return False
     id_dish_show = random.choice(all_id_no_show_dishes)
     add_id_show_dish(subscription, id_dish_show)
     return id_dish_show

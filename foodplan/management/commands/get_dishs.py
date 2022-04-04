@@ -19,7 +19,7 @@ def get_dish(update, context):
         return states.States.PERSONAL_AREA
     dish = Dish.objects.get(id=id_dish)
     #Здесь нужна проверка на истечение срока
-    update.send_photo(chat_id=update.message.chat_id, photo=dish.img)
+    #update.send_photo(chat_id=update.message.chat_id, photo=dish.img)
     update.message.reply_text(
         dedent(f'''\
         Новое блюдо: {dish.name}
