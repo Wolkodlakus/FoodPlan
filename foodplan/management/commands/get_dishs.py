@@ -27,9 +27,8 @@ def get_dish(update, context):
         Рецепт: {dish.recipe}
         Совет: {dish.advice}
         Килокалорий:{dish.kkal}
-        
-        Чтобы выбрать другое блюдо нажмите кнопку Другое'''),
-        reply_markup=keyboards.other()
+        '''),
+        reply_markup=keyboards.create_personal_area()
     )
 
-    return states.States.CURRENT_SUBSCRIPTIONS
+    return states.States.PERSONAL_AREA
