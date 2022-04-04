@@ -3,7 +3,15 @@ from django.core.management import BaseCommand, CommandError
 from django.core.exceptions import ObjectDoesNotExist
 import logging
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
-from telegram.ext import CallbackContext, MessageHandler, Filters, ConversationHandler, CommandHandler, Updater
+from telegram.ext import (
+    CallbackContext,
+    MessageHandler,
+    Filters,
+    ConversationHandler,
+    CommandHandler,
+    Updater,
+    PreCheckoutQueryHandler
+)
 from foodplan.models import Client
 from telegram import LabeledPrice
 from textwrap import dedent
@@ -211,5 +219,7 @@ def main():
     )
 
     dispatcher.add_handler(conversation_handler)
+    dispatcher.add_handler(PreCheckoutQueryHandler(payment.precheckout_callback))
+
     updater.start_polling()
     updater.idle()
