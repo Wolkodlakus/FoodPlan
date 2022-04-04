@@ -269,3 +269,11 @@ class Dish (models.Model):
         verbose_name='ссылка на картинку',
         default='https://static6.depositphotos.com/1006753/572/i/600/depositphotos_5728788-stock-photo-frying-pan.jpg'
     )
+
+
+class DishViewSubscription(models.Model):
+    subcription = models.ForeignKey(Recipe, on_delete=models.CASCADE,verbose_name='ID подписки')
+    dish = models.ForeignKey(Ingredient, on_delete=models.CASCADE,verbose_name= 'ID уже показанного блюда')
+
+    def __str__(self):
+        return 'Подписка '+ self.id_sub.name + ', ' + self.id_dish.name

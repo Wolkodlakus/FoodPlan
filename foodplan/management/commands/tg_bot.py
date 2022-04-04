@@ -12,7 +12,7 @@ from telegram.ext import (
     Updater,
     PreCheckoutQueryHandler
 )
-from foodplan.models import Client
+from foodplan.models import Client, DishViewSubscription, Subscription, Dish
 from telegram import LabeledPrice
 from textwrap import dedent
 import datetime
@@ -44,7 +44,7 @@ class Command(BaseCommand):
 def add_subscribe(update, context):
     pass
 
-def get_dish(update, context):
+def get_one_dish(update, context):
     subscription = context.user_data['subscription']
     all_id_suitable_dishes = get_id_suitable_dishes(subscription)
     all_id_show_dishes = get_id_show_dishes(subscription)
@@ -60,20 +60,37 @@ def get_dish(update, context):
         if not (id_dish in all_id_show_dishes):
             all_id_no_show_dishes.append(id_dish)
     id_dish_show = random.choice(all_id_no_show_dishes)
-    add_id_show_dish(subscription)
+    add_id_show_dish(subscription, id_dish_show)
     return id_dish_show
 
-def add_id_show_dish(subscription):
-    pass
+def add_id_show_dish(subscription, id_dish_show):
+    dvs = DishViewSubscription.objects.create(
+        subcription = subscription,
+        dish = Dish.objects.get(id=id_dish_show)
+    )
+
 
 def clear_show_dishes(subscription):
-    pass
+    DishViewSubscription.objects.filter(subcription = subscription).delete()
+
 
 def get_id_show_dishes(subscription):
-    pass
+    dvs = DishViewSubscription.objects.filter(subcription = subscription)
+    id_dishs = []
+    for item in dvs:
+        id_dishs.append(item.dish.id)
+    return id_dishs
 
 def get_id_suitable_dishes(subscription):
-    return True
+    dishs_suitables = Dish.objects.filter(
+        menu=subscription.menu,
+        portions = subscription.portions,
+        allergies = subscription.allergies,
+    )
+    ds = []
+    for item in dishs_suitables:
+        ds.append(item.id)
+    return ds
 
 
 

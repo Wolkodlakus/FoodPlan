@@ -65,10 +65,6 @@ def get_client_subscriptions(id_client):
     return client.subscriptions.all()
 
 
-def get_dish():
-    pass
-
-
 def get_allergies():
     """Функция выводит список аллергий"""
     allergies = []
