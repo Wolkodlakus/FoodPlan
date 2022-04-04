@@ -76,3 +76,9 @@ def pay():
         [KeyboardButton(text='PAY')],
     ]
     return make_reply_markup(keyboard)
+
+def other():
+    keyboard = [
+        [KeyboardButton(text='Другое')],
+    ]
+    return make_reply_markup(keyboard)
