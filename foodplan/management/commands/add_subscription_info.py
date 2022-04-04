@@ -1,8 +1,7 @@
-import foodplan.management.commands.states as states
-import foodplan.management.commands.keyboards as keyboards
 from textwrap import dedent
-import foodplan.management.commands.funcs_db as funcs_db
 
+import foodplan.management.commands.keyboards as keyboards
+import foodplan.management.commands.states as states
 
 
 def choose_menu_type(update, context):
@@ -58,7 +57,7 @@ def get_allergies_id(allergy_name):
 
 
 def choose_subscriptions_term(update, context):
-    #context.chat_data['allergies'] = get_allergies_id(update.message.text)
+    # context.chat_data['allergies'] = get_allergies_id(update.message.text)
     context.chat_data['allergies'] = update.message.text
     update.message.reply_text(
         'Выберите срок подписки',
@@ -67,22 +66,23 @@ def choose_subscriptions_term(update, context):
 
     return states.States.OUTPUT_COST_AND_PARAMS
 
-def get_cost_subscriptions(update, context):
 
+def get_cost_subscriptions(update, context):
     if context.chat_data['menu_type'] == 'Классическое':
         cost = 100
     else:
         cost = 200
-    cost = cost * (0.95+0.05*context.chat_data['person_amount'])
+    cost = cost * (0.95 + 0.05 * context.chat_data['person_amount'])
     cost = cost * (0.95 + 0.05 * context.chat_data['meals_amount'])
     if context.chat_data['allergies'] != 'Нет':
         cost = cost * 1.5
-    cost = cost* context.chat_data['sub_term']
+    cost = cost * context.chat_data['sub_term']
     return cost
+
 
 def output_cost_and_params(update, context):
     context.chat_data['sub_term'] = int(update.message.text)
-    new_subscriptions = {
+    new_subscription = {
         'client_chat_id': update.message.chat_id,
         'menu_type': context.chat_data['menu_type'],
         'person_amount': context.chat_data['person_amount'],
@@ -91,26 +91,19 @@ def output_cost_and_params(update, context):
         'sub_term': context.chat_data['sub_term'],
         'cost': get_cost_subscriptions(update, context)
     }
-    context.chat_data['new_subscriptions'] = new_subscriptions
+    context.chat_data['new_subscription'] = new_subscription
     update.message.reply_text(
         dedent(f'''\
             Ваша подписка:
-            Тип меню: {new_subscriptions['menu_type']}
-            Количество персон: {new_subscriptions['person_amount']}
-            Количество приемов пищи: {new_subscriptions['meals_amount']}
-            Аллергии: {new_subscriptions['allergies']}
-            Срок подписки: {new_subscriptions['sub_term']}
+            Тип меню: {new_subscription['menu_type']}
+            Количество персон: {new_subscription['person_amount']}
+            Количество приемов пищи: {new_subscription['meals_amount']}
+            Аллергии: {new_subscription['allergies']}
+            Срок подписки: {new_subscription['sub_term']}
             
             Стоимость вашей подписки: 
-            {new_subscriptions['cost']}
+            {new_subscription['cost']}
             Чтобы оплатить нажмите кнопку PAY'''),
         reply_markup=keyboards.pay()
     )
-    #funcs_db.add_subscription(
-    #    funcs_db.find_client(update.message.chat_id),
-    #    new_subscriptions['menu_type'],
-    #    new_subscriptions['person_amount'],
-    #    new_subscriptions['sub_term'],
-    #    new_subscriptions['allergies']
-    #)
     return states.States.PAY

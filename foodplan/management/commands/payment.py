@@ -1,9 +1,11 @@
-from dotenv import load_dotenv
+import os
 
+from dotenv import load_dotenv
+from telegram import LabeledPrice
+
+import foodplan.management.commands.funcs_db as funcs_db
 import foodplan.management.commands.keyboards as keyboards
 import foodplan.management.commands.states as states
-import os
-from telegram import LabeledPrice
 
 
 def start_without_shipping_callback(update, context):
@@ -32,13 +34,14 @@ def successful_payment_callback(update, context):
         reply_markup=keyboards.create_personal_area()
     )
     print('Добавить подписку в БД')
-    # funcs_db.add_subscription(
-    #    funcs_db.find_client(update.message.chat_id),
-    #    new_subscriptions['menu_type'],
-    #    new_subscriptions['person_amount'],
-    #    new_subscriptions['sub_term'],
-    #    new_subscriptions['allergies']
-    # )
+    new_subscription = context.chat_data['new_subscription']
+    funcs_db.add_subscription(
+        funcs_db.find_client(update.message.chat_id),
+        new_subscription['menu_type'],
+        new_subscription['person_amount'],
+        new_subscription['sub_term'],
+        new_subscription['allergies']
+    )
     return states.States.PERSONAL_AREA
 
 
