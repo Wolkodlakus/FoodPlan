@@ -196,7 +196,7 @@ def main():
                     payment.start_without_shipping_callback
                 ),
             ],
-            states.States.ADD_SUBSCRIPTION_TO_DB: [
+            states.States.PAY_BANK: [
                 MessageHandler(
                     Filters.successful_payment,
                     payment.successful_payment_callback

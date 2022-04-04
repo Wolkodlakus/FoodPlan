@@ -18,12 +18,11 @@ def start_without_shipping_callback(update, context):
     description = "Оплата подписки"
     payload = bot_payload
     currency = "RUB"
-    price = 1000
+    price = context.chat_data['new_subscriptions']['cost']
     prices = [LabeledPrice("Test", int(price * 100))]
-
     context.bot.send_invoice(client_id, title, description, payload,
                              provider_token, currency, prices)
-    return states.States.ADD_SUBSCRIPTION_TO_DB
+    return states.States.PAY_BANK
 
 
 def successful_payment_callback(update, context):
@@ -33,6 +32,13 @@ def successful_payment_callback(update, context):
         reply_markup=keyboards.create_personal_area()
     )
     print('Добавить подписку в БД')
+    # funcs_db.add_subscription(
+    #    funcs_db.find_client(update.message.chat_id),
+    #    new_subscriptions['menu_type'],
+    #    new_subscriptions['person_amount'],
+    #    new_subscriptions['sub_term'],
+    #    new_subscriptions['allergies']
+    # )
     return states.States.PERSONAL_AREA
 
 
